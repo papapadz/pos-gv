@@ -1,0 +1,81 @@
+1. Routes.php
+Route::get('leave/apply', 'MenuController@leave_apply');
+Route::get('leave/cancel/{id}', [
+     'uses' => 'MenuController@leave_cancel',
+     'as' => 'leave.cancel'
+    ]);
+Route::get('leave', [
+     'uses' => 'MenuController@leave',
+     'as' => 'leave.index'
+    ]);
+Route::post('leave/store/{vcredits}/{scredits}', [
+     'uses' => 'MenuController@leave_store',
+     'as' => 'leave.store'
+    ]);
+Route::get('leave/edit/{id}', [
+     'uses' => 'MenuController@leave_edit',
+     'as' => 'leave.edit'
+    ]);
+Route::patch('leave/update/{id}/{vcredits}/{scredits}', [
+     'uses' => 'MenuController@leave_update',
+     'as' => 'leave.update'
+    ]);
+Route::get('leave/approve/{id}', [
+     'uses' => 'AdminController@leave_approve',
+     'as' => 'leave.approve'
+    ])->middleware('isAdmin');
+Route::get('leave/disapprove/{id}', [
+     'uses' => 'AdminController@leave_disapprove',
+     'as' => 'leave.disapprove'
+    ])->middleware('isAdmin');
+Route::get('leave/request', [
+     'uses' => 'AdminController@leave_request',
+     'as' => 'leave.request'
+    ])->middleware('isAdmin');
+Route::get('leave/log', [
+     'uses' => 'AdminController@leave_log',
+     'as' => 'leave.log'
+    ])->middleware('isAdmin');
+    
+
+2. AdminController
+gain_lc()
+leave_request()
+leave_disapprove()
+leave_approve()
+leave_log()
+
+
+3. MenuController
+displayMenu()
+leave()
+leave_cancel()
+leave_apply()
+leave_edit()
+leave_store()
+leave_update()
+
+
+
+4. Model and table
+LeaveModel
+LeaveStatusModel
+LogModel
+tbl_employee -> add date_gain_lc
+tbl_leave_earned
+tbl_leave_status -> add rows
+
+
+5. Views
+
+-include folder
+applink.blade.php
+adminapplink.blade.php
+
+- menu folder
+all
+
+- admin folder
+adminmenu.blade.php
+leave_log.blade.php
+leave_requested.blade.php
