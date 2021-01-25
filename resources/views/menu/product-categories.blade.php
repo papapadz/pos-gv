@@ -65,8 +65,9 @@ function saveCat() {
     var thisForm = $('#editCatForm').serialize();
 
      $.ajax ({
-                url : '../product/categories/new/save?'+thisForm
+                url : '{{ url("product/categories/new/save") }}'
                 ,method : 'GET'
+                ,data: thisForm
                 ,cache : false
                 ,beforeSend:function() {
                 //$('#loadModal').modal({ backdrop: 'static' });
@@ -88,8 +89,9 @@ function editCat(id,flag) {
     if(flag==1) {
 
         $.ajax ({
-                url : '../getters/product/category/get?id='+id
+                url : '{{ url("getters/product/category/get") }}'
                 ,method : 'GET'
+                ,data: {id:id}
                 ,cache : false
                 ,beforeSend:function() {
                 //$('#loadModal').modal({ backdrop: 'static' });
@@ -115,8 +117,9 @@ function deleteCat(id) {
 
     if(c) {
         $.ajax ({
-                url : '../products/categories/delete/this?id='+id
+                url : '{{ url("products/categories/delete/this") }}'
                 ,method : 'GET'
+                ,data: {id:id}
                 ,cache : false
                 ,beforeSend:function() {
                 //$('#loadModal').modal({ backdrop: 'static' });

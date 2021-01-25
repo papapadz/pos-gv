@@ -23,8 +23,8 @@
                         <td>{{$p->category}}</td>
                         <td><?php echo number_format((float)$p->unit_price, 2, '.', ''); ?></td>
                         <td>
-                            <a href="javascript:void(0);" class="btn btn-sm btn-primary" onclick="editProduct('{{$p->product_id}}')"><i class="fa fa-edit"></i></a>
-                            <a href="javascript:void(0);" class="btn btn-sm btn-danger" onclick="deleteProduct('{{$p->product_id}}');"><i class="fa fa-trash"></i></a>
+                            <button type="button" class="btn btn-sm btn-primary" onclick="editProduct('{{$p->product_id}}')"><i class="fa fa-edit"></i></button>
+                            <button type="button" class="btn btn-sm btn-danger" onclick="deleteProduct('{{$p->product_id}}');"><i class="fa fa-trash"></i></button>
                         </td>
                     </tr>
                     @endforeach
@@ -136,8 +136,9 @@ $(document).ready(function() {
         var thisform = $('#frmAddProduct').serialize();
 
               $.ajax ({
-                url : '../public/products/new/save?'+thisform
+                url : '{{ url("products/new/save") }}'
                 ,method : 'POST'
+                ,data: thisform
                 ,cache : false
                 ,beforeSend:function() {
                 //$('#loadModal').modal({ backdrop: 'static' });
@@ -160,21 +161,22 @@ $('input[type="file"]').change(function(e){
 });
 
 function editProduct(id) {
-        
+  
         $('#inputpid').val(id);
         $('#pModalimage').prop('hidden',false);
         $('#pModalHeader').prop('hidden',true);
         
         $.ajax ({
-                url : '../public/getters/product/find/get?id='+id
+                url : "{{ url('getters/product/find/get') }}"
                 ,method : 'GET'
+                ,data: {id:id}
                 ,cache : false
                 ,beforeSend:function() {
                 //$('#loadModal').modal({ backdrop: 'static' });
                 }
               }).done( function(response){
                 
-                $('#pModalimage').prop('src',"../public/img/prod/"+response["img_file"]);
+                $('#pModalimage').prop('src',response["img_file"]);
                 $('#addProductModal').modal('show');
                 var element = document.getElementById('custom-file-label');
                 element.innerHTML = response["img_file"];
@@ -195,8 +197,9 @@ function deleteProduct(id) {
     if(c) {
             
             $.ajax ({
-                url : '../public/products/delete/this?id='+id
+                url : '{{ url("products/delete/this") }}'
                 ,method : 'GET'
+                ,data: { id:id }
                 ,cache : false
                 ,beforeSend:function() {
                 //$('#loadModal').modal({ backdrop: 'static' });

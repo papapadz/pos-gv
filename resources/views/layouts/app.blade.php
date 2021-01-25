@@ -152,8 +152,9 @@
             var thisFrm = $('#closeStoreFrm').serialize();
 
               $.ajax ({
-                url : '../public/store/closing-details/save?'+thisFrm
+                url : '{{ url("store/closing-details/save") }}'
                 ,method : 'GET'
+                ,data: thisFrm
                 ,cache : false
                 ,beforeSend:function() {
                 //$('#loadModal').modal({ backdrop: 'static' });
@@ -243,8 +244,11 @@
 
             if(c) {
               $.ajax ({
-                url : '../public/users/delete/this?id='+id+'&flag='+flag
+                url : '{{ url("users/delete/this") }}'
                 ,method : 'GET'
+                ,data: {
+                  id:id,flag:flag
+                }
                 ,cache : false
                 ,beforeSend:function() {
                 //$('#loadModal').modal({ backdrop: 'static' });

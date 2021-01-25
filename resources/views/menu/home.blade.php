@@ -128,7 +128,7 @@
               
               @foreach($cat as $k => $c)
                 
-                @if($k===0)
+                @if($k==0)
                 <div class="tab-pane fade show active" id="cat{{$c->category_id}}" role="tabpanel" aria-labelledby="nav-profile-tab">
                 @else
                 <div class="tab-pane fade" id="cat{{$c->category_id}}" role="tabpanel" aria-labelledby="nav-profile-tab">
@@ -136,7 +136,7 @@
 
                 @forelse($arrCat[$k] as $p)
                   <a href="javascript:void(0)">
-                            <img class="rounded img-fluid mx-auto prod_pic_menu" id="{{$p->product_id}}" data-toggle="tooltip" data-placement="bottom" title="{{$p->product_name}} - PHP {{$p->unit_price}}" src="{{url('img/prod/'.$p->img_file)}}">
+                            <img class="rounded img-fluid mx-auto prod_pic_menu" id="{{$p->product_id}}" data-toggle="tooltip" data-placement="bottom" title="{{$p->product_name}} - PHP {{$p->unit_price}}" src="{{$p->img_file}}">
                   </a>
                 @empty
                 There are no Items here right now
@@ -250,8 +250,9 @@
                 items.push(id);
 
                 $.ajax ({
-                  url : '../public/getters/product/get?id='+id
+                  url : '{{ url("getters/product/get") }}'
                   ,method : 'GET'
+                  ,data: { id:id }
                   ,cache : false
                   ,beforeSend:function() {
                   //$('#loadModal').modal({ backdrop: 'static' });
@@ -318,8 +319,9 @@
 
 
               $.ajax ({
-                url : '../public/sales/new/save?'+thisform
+                url : '{{ url("sales/new/save") }}'
                 ,method : 'GET'
+                ,data: thisform
                 ,cache : false
                 ,beforeSend:function() {
                 //$('#loadModal').modal({ backdrop: 'static' });
@@ -342,8 +344,9 @@
 
           var tid = $('#inputTransID').val();
               $.ajax ({
-                url : '../public/sales/add/items/save?tid='+tid+'&'+thisform
+                url : '{{ url("sales/add/items/save?") }}'+thisform
                 ,method : 'GET'
+                ,data: { tid:tid }
                 ,cache : false
                 ,beforeSend:function() {
                 //$('#loadModal').modal({ backdrop: 'static' });

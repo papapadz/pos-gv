@@ -51,8 +51,9 @@
                 if(c) {
 
                     $.ajax ({
-                    url : '../public/beginning-balance/set/save?bb='+bb
+                    url : '{{ url("beginning-balance/set/save") }}'
                     ,method : 'GET'
+                    ,data: {bb:bb}
                     ,cache : false
                     ,beforeSend:function() {
                     //$('#loadModal').modal({ backdrop: 'static' });

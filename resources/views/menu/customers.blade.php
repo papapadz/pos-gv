@@ -88,8 +88,9 @@ $(document).ready(function() {
             var thisform = $('#editUserForm').serialize();
 
               $.ajax ({
-                url : '../public/users/new/save?'+thisform+'&flag=1'
+                url : '{{ url("users/new/save?") }}'+thisform
                 ,method : 'GET'
+                ,data: { flag:1 }
                 ,cache : false
                 ,beforeSend:function() {
                 //$('#loadModal').modal({ backdrop: 'static' });
@@ -122,8 +123,9 @@ $(document).ready(function() {
 
         var cardNum = $('#cardNumInput').val();
             $.ajax ({
-                url : '../public/getters/green-perks/get?card_num='+cardNum
+                url : '{{ url("getters/green-perks/get") }}'
                 ,method : 'GET'
+                ,data: { card_num:cardNum }
                 ,cache : false
                 ,beforeSend:function() {
                 //$('#loadModal').modal({ backdrop: 'static' });
@@ -149,8 +151,9 @@ function editUser(id,flag) {
         $('#div_pointsInput').prop('hidden',false);
         $('#useridInput').val('');
         $.ajax ({
-                url : '../public/getters/users/find/get?id='+id+'&flag='+flag
+                url : '{{ url("getters/users/find/get") }}'
                 ,method : 'GET'
+                ,data: { id:id, flag:flag }
                 ,cache : false
                 ,beforeSend:function() {
                 //$('#loadModal').modal({ backdrop: 'static' });

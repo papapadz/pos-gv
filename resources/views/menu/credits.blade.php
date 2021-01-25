@@ -295,8 +295,14 @@ $(document).ready(function() {
         var tid = b.innerHTML.substring(16);
 
               $.ajax ({
-                url : '../sales/pay/save?transaction_id='+tid+'&c='+cash+'&card_num='+cardNum+'&total='+totalSales
+                url : '{{ url("sales/pay/save") }}'
                 ,method : 'GET'
+                ,data: {
+                    transaction_id:tid,
+                    c:cash,
+                    card_num:cardNum,
+                    total:totalSales
+                }
                 ,cache : false
                 ,beforeSend:function() {
                 //$('#loadModal').modal({ backdrop: 'static' });
@@ -319,8 +325,9 @@ $(document).ready(function() {
 
             if(cardNum!=null) {
                 $.ajax ({
-                url : '../getters/green-perks/get?card_num='+cardNum
+                url :  '{{ url("getters/green-perks/get") }}' 
                 ,method : 'GET'
+                ,data: {card_num:cardNum}
                 ,cache : false
                 ,beforeSend:function() {
                 //$('#loadModal').modal({ backdrop: 'static' });
@@ -404,8 +411,9 @@ function displaySales(id) {
         b.innerHTML = 'Transaction No. '+ id;
 
         $.ajax ({
-                url : '../getters/transactions/sales/items/get?transaction_id='+id
+                url : '{{ url("getters/transactions/sales/items/get") }}'
                 ,method : 'GET'
+                ,data: {transaction_id:id}
                 ,cache : false
                 ,beforeSend:function() {
                 //$('#loadModal').modal({ backdrop: 'static' });
@@ -491,8 +499,9 @@ function displaySales(id) {
 function printReceipt(id) {
 
         $.ajax ({
-                url : '../getters/transactions/sales/items/get?transaction_id='+id
+                url : '{{ url("getters/transactions/sales/items/get") }}'
                 ,method : 'GET'
+                ,data: { transaction_id:id }
                 ,cache : false
                 ,beforeSend:function() {
                 //$('#loadModal').modal({ backdrop: 'static' });
@@ -586,8 +595,9 @@ function printReceipt(id) {
         var c = confirm('Are you sure you want to delete this transactions?');
         if(c) {
             $.ajax ({
-                url : '../sales/delete/this?id='+id
+                url : '{{ url("sales/delete/this") }}'
                 ,method : 'GET'
+                ,data: { id:id }
                 ,cache : false
                 ,beforeSend:function() {
                 //$('#loadModal').modal({ backdrop: 'static' });

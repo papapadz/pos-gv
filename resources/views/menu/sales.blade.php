@@ -1,9 +1,8 @@
 @extends('layouts.app')
 
-
 @section('content')
 <div class="card">
-    <div class="card-body">
+    <div class="card-body  table-responsive">
         <table id="example" class="table table-striped table-bordered" style="width:100%">
         <thead>
             <tr>
@@ -249,7 +248,7 @@ $(document).ready(function() {
     });
 
     $('#btnAddItems').on('click', function() {
-       document.location.href = '../public/sales/add/transaction/'+tid;
+       document.location.href = '{{ url("sales/add/transaction") }}/'+tid;
     });
 
     $('.btnViewSales').on('click', function() {
@@ -265,8 +264,9 @@ $(document).ready(function() {
         b.innerHTML = 'Transaction No. '+ tid;
 
         $.ajax ({
-                url : '../public/getters/transactions/sales/items/get?transaction_id='+tid
+                url : '{{ url("getters/transactions/sales/items/get") }}'
                 ,method : 'GET'
+                ,data: { transaction_id:tid }
                 ,cache : false
                 ,beforeSend:function() {
                 //$('#loadModal').modal({ backdrop: 'static' });
@@ -403,8 +403,9 @@ $(document).ready(function() {
 
             if(cardNum!=null) {
                 $.ajax ({
-                url : '../public/getters/green-perks/get?card_num='+cardNum
+                url : '{{ url("getters/green-perks/get") }}'
                 ,method : 'GET'
+                ,data: { card_num:cardNum }
                 ,cache : false
                 ,beforeSend:function() {
                 //$('#loadModal').modal({ backdrop: 'static' });
@@ -442,8 +443,14 @@ $(document).ready(function() {
     $('#btnPaySales').on('click', function() {
             
               $.ajax ({
-                url : '../public/sales/pay/save?transaction_id='+tid+'&c='+cash+'&card_num='+cardNum+'&total='+totalSales
+                url : '{{ url("sales/pay/save") }}'
                 ,method : 'GET'
+                ,data: {
+                    transaction_id:tid,
+                    c:cash,
+                    card_num:cardNum,
+                    total:totalSales
+                }
                 ,cache : false
                 ,beforeSend:function() {
                 //$('#loadModal').modal({ backdrop: 'static' });
@@ -500,10 +507,11 @@ $(document).ready(function() {
 
         if(ln.length>0 && fn.length>0 && phone.length>0 && addr.length>0) {
             var frmCredit = $('#frmCredit').serialize();
-
+            console.log(frmCredit)
             $.ajax ({
-                url : '../public/credits/new/save?'+frmCredit+'&transaction_id='+tid
+                url : '{{ url("credits/new/save?") }}' + frmCredit
                 ,method : 'GET'
+                ,data: { transaction_id:tid }
                 ,cache : false
                 ,beforeSend:function() {
                 //$('#loadModal').modal({ backdrop: 'static' });
@@ -608,8 +616,9 @@ $(document).ready(function() {
         var c = confirm('Are you sure you want to delete this transactions?');
         if(c) {
             $.ajax ({
-                url : '../public/sales/delete/this?id='+id
+                url : '{{ url("sales/delete/this") }}' 
                 ,method : 'GET'
+                ,data: {id:id}
                 ,cache : false
                 ,beforeSend:function() {
                 //$('#loadModal').modal({ backdrop: 'static' });

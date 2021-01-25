@@ -108,6 +108,7 @@ class AdminController extends Controller
       $b_isActive = 0;
       
       $bb = GettersController::getBeginningBalance(0);
+      
       if($bb)
         $b_isActive = $bb->is_active;
 
@@ -118,7 +119,6 @@ class AdminController extends Controller
           ->JOIN('tbl_users','tbl_users.id','=','tbl_transactions.user_id')
           ->WHERE('is_paid','!=',2)
           ->GET();
-
         $totals = array();
         
         foreach ($transactions as $k => $t) {

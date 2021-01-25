@@ -492,8 +492,9 @@
         var thisForm = $('#frmAddSales').serialize();
 
                 $.ajax ({
-                      url : '../public/reports/sales/add?'+thisForm
+                      url : '{{ url("reports/sales/add") }}'
                       ,method : 'GET'
+                      ,data: thisForm
                       ,cache : false
                       ,beforeSend:function() {
                       //$('#loadModal').modal({ backdrop: 'static' });
@@ -624,8 +625,9 @@
       
       var eid = 0;
       $.ajax ({
-                    url : '../public/getters/expense-names/get?name='+str
+                    url : '{{ url("getters/expense-names/get") }}'
                     ,method : 'GET'
+                    ,data: { name:str }
                     ,cache : false
                     ,beforeSend:function() {
                     //$('#loadModal').modal({ backdrop: 'static' });
@@ -635,8 +637,9 @@
                     var thisForm = $('#frmAddExpense').serialize();
 
                     $.ajax ({
-                          url : '../public/expense/new/save?expense_category='+eid+'&'+thisForm
+                          url : '{{ url("expense/new/save?") }}' + thisForm
                           ,method : 'GET'
+                          ,data: {expense_category:eid}
                           ,cache : false
                           ,beforeSend:function() {
                           //$('#loadModal').modal({ backdrop: 'static' });
@@ -679,7 +682,7 @@
     function getDailyCashinCashout() {
        
                 $.ajax ({
-                    url : '../public/getters/daily-cashin-cashout/get'
+                    url : '{{ url("getters/daily-cashin-cashout/get") }}'
                     ,method : 'GET'
                     ,cache : false
                     ,beforeSend:function() {
@@ -720,7 +723,7 @@
     function getExpenseReport() {
               
               $.ajax ({
-                    url : '../public/getters/expense-reports/get'
+                    url : '{{ url("getters/expense-reports/get") }}'
                     ,method : 'GET'
                     ,cache : false
                     ,beforeSend:function() {
@@ -764,8 +767,9 @@
     function getSalesReport() {
 
       $.ajax ({
-                    url : '../public/getters/daily-cashin-cashout/get?flag='+1
+                    url : '{{ url("getters/daily-cashin-cashout/get") }}'
                     ,method : 'GET'
+                    ,data: {flag:1}
                     ,cache : false
                     ,beforeSend:function() {
                     //$('#loadModal').modal({ backdrop: 'static' });
@@ -799,8 +803,9 @@
       var c = confirm('Are you sure you want to delete this record?');
       if(c) {
         $.ajax ({
-                    url : '../public/expense/delete/this?id='+id
+                    url : '{{ url("expense/delete/this") }}'
                     ,method : 'GET'
+                    ,data: {id:id}
                     ,cache : false
                     ,beforeSend:function() {
                     //$('#loadModal').modal({ backdrop: 'static' });
@@ -848,8 +853,9 @@
       var y = $('#product_year').val();
 
       $.ajax ({
-                    url : '../public/getters/product_trends/get?year='+y
+                    url :  '{{ url("getters/product_trends/get") }}' 
                     ,method : 'GET'
+                    ,data: {year:y}
                     ,cache : false
                     ,beforeSend:function() {
                     //$('#loadModal').modal({ backdrop: 'static' });
@@ -889,8 +895,9 @@
       $('#printDailyCinCout').prop('hidden',false);
       
       $.ajax ({
-                    url : '../public/getters/daily-cashin-cashout/get?id='+d
+                    url : '{{ url("getters/daily-cashin-cashout/get") }}'
                     ,method : 'GET'
+                    ,data: {id:d}
                     ,cache : false
                     ,beforeSend:function() {
                     //$('#loadModal').modal({ backdrop: 'static' });
@@ -1014,8 +1021,9 @@
                 if(c) {
                 
                   $.ajax ({
-                    url : 'beginning/reset?id='+d
+                    url : '{{ url("beginning/reset") }}'
                     ,method : 'GET'
+                    ,data: {id:d}
                     ,cache : false
                     ,beforeSend:function() {
                     //$('#loadModal').modal({ backdrop: 'static' });
@@ -1044,8 +1052,9 @@
             var cinCoutDate = $('#cinCoutDate').val();
           
             $.ajax ({
-                  url : 'pos/public/getters/today/daily-report/?d='+cinCoutDate
+                  url : '{{ url("getters/today/daily-report") }}'
                   ,method : 'GET'
+                  ,data: {d:cinCoutDate}
                   ,cache :false
                   ,beforeSend:function() {
                   //$('#loadModal').modal({ backdrop: 'static' });
@@ -1268,8 +1277,9 @@
         var thisForm = $('#frmAddExpenseName').serialize();
 
         $.ajax ({
-                    url : '../public/expense-name/new/save?'+thisForm
+                    url : '{{ url("expense-name/new/save") }}'
                     ,method : 'GET'
+                    ,data: thisForm
                     ,cache : false
                     ,beforeSend:function() {
                     //$('#loadModal').modal({ backdrop: 'static' });
@@ -1294,8 +1304,9 @@
       var v = $('#input_expenseCat').val();
       if(v.length>0) {
         $.ajax ({
-                    url : '../public/expense-categories/add?cat='+v
+                    url : '{{ url("expense-categories/add") }}'
                     ,method : 'GET'
+                    ,data: {cat:v}
                     ,cache : false
                     ,beforeSend:function() {
                     //$('#loadModal').modal({ backdrop: 'static' });
@@ -1324,7 +1335,7 @@
       $('option.expense-name-option').remove()
 
                 $.ajax ({
-                    url : '../public/getters/expense-categories/get'
+                    url : '{{ url("getters/expense-categories/get") }}'
                     ,method : 'GET'
                     ,cache : false
                     ,beforeSend:function() {
@@ -1350,8 +1361,9 @@
       var c = confirm('Are you sure you want to delete this record?');
       if(c) {
         $.ajax ({
-                    url : '../public/expense-categories/delete/this?id='+v
+                    url : '{{ url("expense-categories/delete/this") }}' 
                     ,method : 'GET'
+                    ,data: {id:v}
                     ,cache : false
                     ,beforeSend:function() {
                     //$('#loadModal').modal({ backdrop: 'static' });
@@ -1375,8 +1387,9 @@
       var dd = year+'-'+month+'-01';
       
       $.ajax ({
-                      url : '../public/getters/expense-summary/get?dd='+dd
+                      url : '{{ url("getters/expense-summary/get") }}'
                       ,method : 'GET'
+                      ,data: {dd:dd}
                       ,cache : false
                       ,beforeSend:function() {
                       //$('#loadModal').modal({ backdrop: 'static' });
@@ -1414,8 +1427,9 @@
         $('tr.tr_listExpenses').remove();
 
                   $.ajax ({
-                      url : '../public/getters/expense-reports/by-month/get?dd='+dd
+                      url : '{{ url("getters/expense-reports/by-month/get") }}'
                       ,method : 'GET'
+                      ,data: { dd:dd }
                       ,cache : false
                       ,beforeSend:function() {
                       //$('#loadModal').modal({ backdrop: 'static' });
@@ -1515,7 +1529,7 @@
 function loadTags(x) {
   var availableTags=new Array();
   $.ajax ({
-                    url : '../public/getters/expense-names/get'
+                    url : '{{ url("getters/expense-names/get") }}'
                     ,method : 'GET'
                     ,cache : false
                     ,beforeSend:function() {

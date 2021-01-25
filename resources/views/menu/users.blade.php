@@ -91,8 +91,9 @@ $(document).ready(function() {
         var thisform = $('#editUserForm').serialize();
 
               $.ajax ({
-                url : '../public/users/new/save?'+thisform+'&flag=0'
+                url : '{{ url("users/new/save?") }}' +thisform
                 ,method : 'GET'
+                ,data: {flag:0}
                 ,cache : false
                 ,beforeSend:function() {
                 //$('#loadModal').modal({ backdrop: 'static' });
@@ -145,8 +146,9 @@ function editUser(id,flag) {
         $('#useridInput').val('');
 
         $.ajax ({
-                url : '../public/getters/users/find/get?id='+id+'&flag='+flag
+                url : '{{ url("getters/users/find/get") }}'
                 ,method : 'GET'
+                ,data: {id:id,flag:flag}
                 ,cache : false
                 ,beforeSend:function() {
                 //$('#loadModal').modal({ backdrop: 'static' });

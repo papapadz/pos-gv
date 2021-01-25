@@ -37,7 +37,7 @@ $('#btn-admin-open').on('click', function() {
                 if(c) {
                 
                   $.ajax ({
-                    url : 'beginning/reset'
+                    url : '{{ url("beginning/reset") }}'
                     ,method : 'GET'
                     ,cache : false
                     ,beforeSend:function() {
