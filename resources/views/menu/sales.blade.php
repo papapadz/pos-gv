@@ -209,7 +209,8 @@
         </table>
       </div><!-- /.modal-body -->
       <div class="modal-footer">
-        <center><button id="btnPrintReceipt" type="button" class="btn btn-warning" >Print</button></center>
+        {{-- <center><button id="btnPrintReceipt" type="button" class="btn btn-warning" >Print</button></center> --}}
+        <center><a id="btnprint" type="button" class="btn btn-warning" href="#">Print</a></center>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
@@ -465,7 +466,8 @@ $(document).ready(function() {
     });
 
     $('#btnPrintSales').on('click', function() {
-        printReceipt(salesObject);
+        window.open('{{ url("print/receipt") }}/'+tid,'_blank')
+        //printReceipt(salesObject);
     });
 
     $('#receiptModal').on('hidden.bs.modal', function (e) {
@@ -532,6 +534,7 @@ $(document).ready(function() {
 
     function printReceipt(jArray) {
 
+        $('#btnprint').prop('href','{{ url("print/receipt") }}'+'/'+tid)
         var thisTotalItems = 0;
         var thisSalesTotal = parseFloat(totalSales) + parseFloat(totalDiscount);
 
@@ -602,12 +605,9 @@ $(document).ready(function() {
             on.innerHTML = 'Total Points: '+ jArray[0]['total_points'];
         }
         
-        
-
         $('#salesItemsModal').modal('hide');
         $('#paymentModal').modal('hide');
         $('#receiptModal').modal('show');
-   
     }
 
 });

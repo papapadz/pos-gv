@@ -99,4 +99,6 @@ Route::group(['middlewareGroups' => ['web']], function(){
     Route::get('getters/expenses/list/get','GettersController@getExpenseList')->middleware('isAdmin');
     Route::get('getters/product_trends/get','GettersController@getProductTrends')->middleware('isAdmin');
     Route::get('getters/users/find/get','GettersController@getUser')->middleware('isAdmin');
+
+    Route::get('print/receipt/{id}','AdminController@generatereceipt');
 });

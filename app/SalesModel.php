@@ -11,4 +11,11 @@ class SalesModel extends Model
     protected $primaryKey = 'sales_id';
     protected $table = 'tbl_sales';
 
+    public function transaction() {
+        return $this->belongsTo(TransactionsModel::class,'transaction_id','transaction_id');
+    }
+
+    public function products() {
+        return $this->hasOne(ProductsModel::class,'product_id','product_id')->with('price');
+    }
 }

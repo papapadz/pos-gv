@@ -22,6 +22,7 @@ use App\User as USERS;
 use App\GreenPerksModel as GREENPERKS;
 use App\ProductCategoryModel as PRODUCTCATEGORIES;
 use App\CustomerCreditsModel as CUSTOMERCREDITS;
+use PDF;
 
 class AdminController extends Controller
 {
@@ -263,6 +264,13 @@ class AdminController extends Controller
         return true;
 
       return false;
+    }
+
+    public function generatereceipt($id) {
+      $data = TRANSACTIONS::find($id);
+      $or = 'transaction_'.$id.'.pdf';
+      $pdf = PDF::loadView('layouts.receipt',compact('data'))->setPaper(array(0,0,204,650))->setOptions(['dpi' => 72,'isHtml5ParserEnabled' => true]);
+      $pdf->download('asdf.pdf');
     }
 }
 ?>
