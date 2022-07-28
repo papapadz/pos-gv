@@ -83,21 +83,19 @@ class AdminController extends Controller
       $bb = GettersController::getBeginningBalance(0);
       $countUnpaid = GettersController::getUnpaidSales(0);
       $countCredit = GettersController::getUnpaidSales(2);
-
+      
       if($bb) {
-        
         if($bb->is_active==0)
           return view('welcome2', compact('countUnpaid','countCredit'));
 
-        $cat = PRODUCTCATEGORIES::ORDERBY('category')->GET();
-       
+        $cat = PRODUCTCATEGORIES::ORDERBY('category')->where('deleted_at',null)->GET();
+        
         $arrCat;
         foreach($cat as $k => $c) {
           $arrCat[$k] = PRODUCTS::JOIN('tbl_product_prices','tbl_product_prices.price_id','=','tbl_products.unit_price_id')
             ->ORDERBY('product_name')
             ->WHERE('product_category',$c->category_id)->GET();
         }
-
         $promoList = DISCOUNTS::WHERE('is_active',1)->ORDERBY('promo_name')->GET();
 
             return view('menu/home', compact('cat','arrCat','promoList','countUnpaid','countCredit'));    

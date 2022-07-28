@@ -72,7 +72,9 @@ class SettersController extends Controller
         $extraCharges->SAVE();
 
         $returnVal = array( 'tid' => $tid, 'sales' => $salesArray, 'charge_name' => $extraCharges->charge_name, 'charge_amt' => $extraCharges->charge_amount );
-      } 
+      }
+      
+      return $tid;
     }
 
     public function setNewProduct(Request $req) {
@@ -134,7 +136,8 @@ class SettersController extends Controller
     public function deleteProductCategory(Request $req) {
 
       $productCat = PRODUCTCATEGORIES::FIND($req['id']);
-      $productCat->DELETE();
+      $productCat->deleted_at = Carbon::now();
+      $productCat->save();
     }
 
     public function setPaymentSales(Request $req) {

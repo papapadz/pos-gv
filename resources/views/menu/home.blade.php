@@ -57,14 +57,9 @@
     <!-- SALES MENU -->
     <div class="col-md-5">
         <div class="card">
-          <div class="card-header">
-            <div class="btn-group" role="group" aria-label="...">
-                <button type="button" id="btnDineIn" class="btn btn-success"><i class="fa fa-utensils"></i> Dine In</button>
-                @if(!session('transaction_id'))
-                <button type="button" id="btnTakeOut" class="btn btn-default"><i class="fa fa-box"></i> Take Out</button>
-                @endif
-            </div>
-            <button style="float: right;" type="button" id="btnDiscount" class="btn btn-warning"><i class="fa fa-tags"></i> Discount</button>
+          <div class="card-header bg-info">
+            
+            
           </div>
           
           <div class="card-body" style="border-bottom: 1px solid;">
@@ -96,7 +91,7 @@
             @if(session('transaction_id'))
               <button data-toggle="modal" class="btn btn-lg btn-success" id="btnSaveAddSales">Add Items</button>
             @else
-              <button data-toggle="modal" class="btn btn-lg btn-success" id="btnSaveSales">Submit</button>
+              <button data-toggle="modal" class="btn btn-lg btn-success" id="btnSaveSales">Pay</button>
             @endif
         </div>  
         </div>
@@ -216,6 +211,38 @@
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+
+<!-- payout modal -->
+<div id="paymentModal" class="modal fade" role="dialog" state="display:none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div id="paymentModalHeader" class="modal-header">
+        <span>Member Info:</span>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      </div>
+      <div class="modal-body">
+        <label>Total Amount</label>
+        <div id="displayTotal"><h3>PHP 0.00</h3></div>
+        <hr>
+        <div id="divForCash">
+            <label>Amount (PHP)</label>
+            <input type="number" class="form-control" id="displayPayment" placeholder="Amount Tendered">
+            <hr>
+            <label>Change</label>
+            <div id="displayChange"><h3>PHP 0.00</h3></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <center>
+            <button id="btnPaySales" type="button" class="btn btn-success" hidden="true">Submit</button>
+            
+        </center>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!-- end payout modal -->
+
 @endsection
 
 @section('script')
@@ -229,6 +256,7 @@
     var items_total = 0.00;
     var isDine = 1;
     var discountPrice = 0;
+    var tid = null;
 
     $(document).ready(function() {
 
@@ -328,9 +356,12 @@
                 }
               }).done( function(response){
 
-                alert('Order has been saved!');
-                location.reload(); 
+                //alert('Order has been saved!');
+                //location.reload(); 
                 //printReceipt(response);
+                tid = response
+                payout()
+                $('#paymentModal').modal('show')
                 
               }).fail( function(response) {
                 alert('Sorry, there was an error in saving your record');
@@ -444,6 +475,74 @@
       
     });
 
+    $('#displayPayment').change(function() {
+
+      cash = $('#displayPayment').val();
+      cc = cash-totalSales;
+
+      if(cc>=0) {
+          $('#btnPaySales').prop('hidden',false);
+          
+          var md = document.getElementById('displayChange');
+          var md_change = md.getElementsByTagName('h3')[0];
+
+          md_change.innerHTML = "PHP " + parseFloat(cc).toFixed(2);
+      } else {
+          alert('You have entered an invalid amount, try again!');
+          var md = document.getElementById('displayChange');
+          var md_change = md.getElementsByTagName('h3')[0];
+
+          md_change.innerHTML = "PHP 0.00";
+          $('#btnPaySales').prop('hidden',true);
+      }
+
+
+      /*
+      var tr = document.getElementById('salesCash');
+      var r_c = tr.getElementsByTagName('td')[1];
+      r_c.innerHTML = parseFloat(c).toFixed(2);
+
+      var tr = document.getElementById('salesChange');
+      var r_cc = tr.getElementsByTagName('td')[1];
+      r_cc.innerHTML = parseFloat(cc).toFixed(2);
+      */
+      });
+
+      $('#btnPaySales').on('click', function() {
+            
+            $.ajax ({
+              url : '{{ url("sales/pay/save") }}'
+              ,method : 'GET'
+              ,data: {
+                  transaction_id:tid,
+                  c:cash,
+                  card_num:null,
+                  total:totalSales
+              }
+              ,cache : false
+              ,beforeSend:function() {
+              //$('#loadModal').modal({ backdrop: 'static' });
+              }
+            }).done( function(response){
+              
+              // printReceipt(response);
+              Swal.fire({
+                title: 'Success!',
+                text: 'Transaction saved!',
+                icon: 'success',
+              }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+                  window.location.reload();
+                }
+              })
+              setTimeout(function(){
+                window.location.reload();
+              }, 5000);
+            }).fail( function(response) {
+              alert('Sorry, there was an error in saving your record');
+            });
+      });
 });
 
     function checkItem(x) {
@@ -627,27 +726,6 @@
         $isDine = 1;
     }
 
-    /*
-    function getDiscountPrice(x, id) {
-
-        var dType = $('select_discount_'+id).val();
-        var dAmount = x.value;
-
-        if(dType!=='0')
-          discountPrice = parseFloat(discountPrice) + parseFloat(dAmount)
-
-        setSubtotal(0,0);
-    }
-
-    
-    function functionSetDiscount(x) {
-
-      var tr = document.getElementById('discount_tr_'+x);
-      var qty = tr.getElementsByTagName('td')[2];
-        
-      alert(qty.innerHTML);
-    }*/
-
     function getVal(sel, id) {
 
       var v = sel.value;
@@ -705,6 +783,110 @@
 
       $('#frm_discount_id_'+id).remove();
       $('#frm_discount_amt_'+id).remove();
+    }
+
+    function payout() {
+      $.ajax ({
+                url : '{{ url("getters/transactions/sales/items/get") }}'
+                ,method : 'GET'
+                ,data: { transaction_id:tid }
+                ,cache : false
+                ,beforeSend:function() {
+                //$('#loadModal').modal({ backdrop: 'static' });
+                }
+              }).done( function(response){
+                console.log(response)
+                salesObject = response;
+                totalSales = 0;
+                totalItems = 0;
+                totalDiscount = response.discount_amount;
+                $('#p_creditor').remove();
+                
+                if(salesObject[0]['is_paid']==1) {
+
+                    $('#btnCheckout').prop('hidden',true);
+                    $('#btnPrintSales').prop('hidden',false);  
+                    $('#btnAddItems').prop('hidden',true);  
+                    $('#opt_credit').prop('hidden',false);
+                    
+                } else {
+
+                    if(salesObject[0]['is_paid']==2) {
+                        $('#opt_credit').prop('hidden',true);
+                        $('#div_creditor').append(
+                            '<p id="p_creditor">Name: <b>'+ salesObject[0]['credit_last_name'] + ', ' + salesObject[0]['credit_first_name']+
+                            ' </b><br>Contact No: <b>' + salesObject[0]['contact_no'] +
+                            ' </b><br>Address/Agency/Company: <b>' + salesObject[0]['address'] + '</b></p>'
+                        );
+                    } else {
+                    
+                        $('#opt_credit').prop('hidden',false);
+                        
+                    }
+
+                    $('#btnPrintSales').prop('hidden',true);
+                    //$('#btnCheckout').prop('hidden',false);
+                    $('#btnAddItems').prop('hidden',false);  
+                    
+                }
+
+                for (var i = 0; i < salesObject.length; i++) {
+
+                    totalItems = totalItems + salesObject[i]['qty'];   
+                    var totalPrice = salesObject[i]['unit_price'] * salesObject[i]['qty'];
+
+                    var discountAmt = parseFloat(salesObject[i]['discount_amount']).toFixed(2);
+
+                    totalDiscount = totalDiscount + discountAmt;
+
+                    totalSales = (totalSales + totalPrice) - discountAmt;
+
+                    var discountStatement = "";
+                    if(discountAmt>0)
+                        discountStatement = '<i>(Php'+parseFloat(discountAmt).toFixed(2)+' off)</i>';
+
+                    var thisSalesTotal = totalPrice- discountAmt;
+
+                    $('#tblSalesItems').append(
+                    '<tr class="tr_SalesItems">'+
+                    '<td>'+salesObject[i]['product_name']+discountStatement+'</td>'+
+                    '<td>'+parseFloat(salesObject[i]['unit_price']).toFixed(2)+'</td>'+
+                    '<td>'+salesObject[i]['qty']+'</td>'+
+                    '<td align="right">'+parseFloat(thisSalesTotal).toFixed(2)+'</td>'+
+                    '</tr>'
+                    );
+
+                }
+
+                if(salesObject[0]['extra_charge_id']) {
+                    
+                    totalSales = totalSales + parseFloat(salesObject[0]['charge_amount']);
+                    totalItems = totalItems + 1;
+
+                    $('#tblSalesItems').append(
+                    '<tr class="tr_SalesItems">'+
+                    '<td>'+salesObject[0]['charge_name']+'</td>'+
+                    '<td>'+parseFloat(salesObject[0]['charge_amount']).toFixed(2)+'</td>'+
+                    '<td>1</td>'+
+                    '<td align="right">'+parseFloat(salesObject[0]['charge_amount']).toFixed(2)+'</td>'+
+                    '</tr>'
+                    );
+                } 
+
+                $('#tblSalesItems').append(
+                    '<tr class="tr_SalesItems">'+
+                    '<td colspan="4" align="right" style="font-size:20px; border-top:1px solid"><b>Total: PHP '+parseFloat(totalSales).toFixed(2)+'</b></td>'+
+                    '</tr>'
+                );
+                
+                var paymentModalDivTotal = document.getElementById('displayTotal');
+                var paymentModalH3Total = paymentModalDivTotal.getElementsByTagName('h3')[0];
+                paymentModalH3Total.innerHTML = 'PHP ' + parseFloat(totalSales).toFixed(2);
+                $('#salesItemsModal').modal('show');
+
+              }).fail( function(response) {
+                alert('Sorry there was an error in retrieving the data.');
+              });
     }
 
 </script>
