@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCreditsTable extends Migration
+class CreateExpenseReportsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,8 +12,8 @@ class CreateCreditsTable extends Migration
      */
     public function up()
     {
-        Schema::create('expense_reports', function (Blueprint $table) {
-            $table->increments('id');
+        Schema::create('tbl_expense_reports', function (Blueprint $table) {
+            $table->increments('expense_report_id');
             $table->string('expense_name',255);
             $table->double('expense_amount',11,2)->default(0);
             $table->enum('payment_type',[0,1,2])->default(0);
@@ -31,6 +31,6 @@ class CreateCreditsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('expense_reports');
+        Schema::drop('tbl_expense_reports');
     }
 }

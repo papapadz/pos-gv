@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateBeginningBalancesTable extends Migration
+class CreateTblTransactionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,13 +12,13 @@ class CreateBeginningBalancesTable extends Migration
      */
     public function up()
     {
-        Schema::create('tbl_beginning_balances', function (Blueprint $table) {
-            $table->bigIncrements('beginning_balance_id');
+        Schema::create('tbl_transactions', function (Blueprint $table) {
+            $table->bigIncrements('transaction_id');
             $table->bigInteger('user_id');
                 $table->foreign('user_id')->references('id')->on('tbl_users')->onDelete('cascade');
-            $table->double('balance', 11,2)->default(0);
-            $table->double('cash_count', 11,2)->default(0);
-            $table->boolean('is_active')->default(true);
+            $table->bigInteger('perk_id')->nullable();
+            $table->enum('is_pad',[0,1,2,3])->default(0);
+            $table->float('cash_tendered',10,2);
             $table->timestamps();
         });
     }
@@ -30,6 +30,6 @@ class CreateBeginningBalancesTable extends Migration
      */
     public function down()
     {
-        Schema::drop('tbl_beginning_balances');
+        Schema::drop('tbl_transactions');
     }
 }

@@ -13,9 +13,13 @@ class CreateAffiliationsTable extends Migration
     public function up()
     {
         Schema::create('affiliations', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('user_id');
-            $table->integer('shop_id');
+            $table->bigIncrements('id');
+            $table->bigInteger('user_id');
+                $table->foreign('user_id')->references('id')->on('tbl_users')->onDelete('cascade');
+            $table->bigInteger('shop_id');
+                $table->foreign('shop_id')->references('id')->on('shops')->onDelete('cascade');
+            $table->bigInteger('role_id');
+                $table->foreign('role_id')->references('id')->on('user_roles')->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
         });

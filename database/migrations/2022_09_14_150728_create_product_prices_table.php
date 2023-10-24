@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCreditsTable extends Migration
+class CreateProductPricesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,9 +12,10 @@ class CreateCreditsTable extends Migration
      */
     public function up()
     {
-        Schema::create('product_prices', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('product_id');
+        Schema::create('tbl_product_prices', function (Blueprint $table) {
+            $table->bigIncrements('price_id');
+            $table->bigInteger('product_id');
+                $table->foreign('product_id')->references('product_id')->on('tbl_products')->onDelete('cascade');
             $table->double('cost_price',11,2);
             $table->double('unit_price',11,2);
             $table->timestamps();
@@ -29,6 +30,6 @@ class CreateCreditsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('product_prices');
+        Schema::drop('tbl_product_prices');
     }
 }

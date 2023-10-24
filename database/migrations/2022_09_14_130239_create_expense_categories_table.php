@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCreditsTable extends Migration
+class CreateExpenseCategoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,8 +12,8 @@ class CreateCreditsTable extends Migration
      */
     public function up()
     {
-        Schema::create('expense_categories', function (Blueprint $table) {
-            $table->increments('id');
+        Schema::create('tbl_expense_categories', function (Blueprint $table) {
+            $table->increments('expense_category_id');
             $table->string('category_name',100);
             $table->timestamps();
             $table->softDeletes();
@@ -27,6 +27,6 @@ class CreateCreditsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('expense_categories');
+        Schema::drop('tbl_expense_categories');
     }
 }

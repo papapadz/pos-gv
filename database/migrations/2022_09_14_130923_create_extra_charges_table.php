@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCreditsTable extends Migration
+class CreateExtraChargesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,9 +12,10 @@ class CreateCreditsTable extends Migration
      */
     public function up()
     {
-        Schema::create('extra_charges', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('transaction_id');
+        Schema::create('tbl_extra_charges', function (Blueprint $table) {
+            $table->bigIncrements('extra_charge_id');
+            $table->bigInteger('transaction_id');
+                $table->foreign('transaction_id')->references('transaction_id')->on('tbl_transactions')->onDelete('cascade');
             $table->string('charge_name',100);
             $table->double('charge_amount',11,2)->default(0);
             $table->timestamps();
@@ -28,6 +29,6 @@ class CreateCreditsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('extra_charges');
+        Schema::drop('tbl_extra_charges');
     }
 }

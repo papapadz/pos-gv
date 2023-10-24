@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCreditsTable extends Migration
+class CreateSalesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,13 +12,16 @@ class CreateCreditsTable extends Migration
      */
     public function up()
     {
-        Schema::create('sales', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('product_id');
+        Schema::create('tbl_sales', function (Blueprint $table) {
+            $table->bigIncrements('sales_id');
+            $table->bigInteger('product_id');
+                $table->foreign('product_id')->references('product_id')->on('tbl_products')->onDelete('cascade');
             $table->integer('qty')->default(1);
-            $table->integer('price_id');
+            $table->bigInteger('price_id');
+                $table->foreign('price_id')->references('price_id')->on('tbl_product_prices')->onDelete('cascade');
             $table->double('discount_amount',11,2)->default(0);
-            $table->integer('user_id');
+            $table->bigInteger('user_id');
+                $table->foreign('user_id')->references('id')->on('tbl_users')->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -31,6 +34,6 @@ class CreateCreditsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('sales');
+        Schema::drop('tbl_sales');
     }
 }

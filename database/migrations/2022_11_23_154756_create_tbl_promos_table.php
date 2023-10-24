@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCreditsTable extends Migration
+class CreateTblPromosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,11 +12,10 @@ class CreateCreditsTable extends Migration
      */
     public function up()
     {
-        Schema::create('credits', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('transaction_id');
-            $table->integer('customer_id');
-            $table->datetime('date_paid')->nullable();
+        Schema::create('tbl_promos', function (Blueprint $table) {
+            $table->increments('promo_id');
+            $table->string('promo_name',100);
+            $table->integer('is_active')->default(1);
             $table->timestamps();
         });
     }
@@ -28,6 +27,6 @@ class CreateCreditsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('credits');
+        Schema::drop('tbl_promos');
     }
 }
